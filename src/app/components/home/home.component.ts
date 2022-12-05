@@ -31,7 +31,16 @@ export class HomeComponent implements OnInit {
     this.httpService
       .getGameList(sort, search)
       .subscribe((gameList: APIResponse<Game>) => {
-        this.games = gameList.results;
+        this.games = gameList.results.map((x) => {
+          x.parent_platforms = x.parent_platforms.map((i) => {
+            i.platform.name = (i.platform.name as any)
+              .replaceAll(' ', '')
+              .replaceAll('/', '-');
+            console.log(i.platform.name);
+            return i;
+          });
+          return x;
+        });
         console.log(gameList);
       });
   }
